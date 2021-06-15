@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_style.dart';
+import '../util/app_style.dart';
 
 class StarIcon extends StatelessWidget {
   @override
