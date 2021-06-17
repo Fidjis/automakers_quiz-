@@ -1,4 +1,6 @@
 import 'package:automakers_quiz/core/domain/models/question_model.dart';
+import 'package:vector_math/vector_math.dart' as math;
+import 'package:automakers_quiz/presentation/pages/modals/completed_questions_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +14,10 @@ class HomePageController extends GetxController {
   final curve = Rx<Curve>(Curves.elasticOut);
 
   //QuestionsWidget
-  final selectedIndex = Rx(0);
+  final selectedIndex = Rx(-1);
   // final question = Rx(<Question>[]);
+  final currentQuestion = Rxn<Question>();
+  int _currentQuestionIndex = 0;
   final questions = Rx(<Question>[
     Question.fromJson({
       "brand": "BMW",
@@ -45,6 +49,8 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    questions.value.shuffle();
+    currentQuestion.value = questions.value[_currentQuestionIndex];
   }
 
   @override
@@ -61,10 +67,54 @@ class HomePageController extends GetxController {
     Future.delayed(
       Duration(milliseconds: 1000),
       () {
+        //change next question
+        selectedIndex.value = -1;
+        if (_currentQuestionIndex < (questions.value.length - 1)) {
+          _currentQuestionIndex++;
+          currentQuestion.value = questions.value[_currentQuestionIndex];
+          currentQuestion.value!.options.shuffle();
+        } else if (_currentQuestionIndex == (questions.value.length - 1)) {
+          // _showSnackMessage('Fim das questões!');
+          _currentQuestionIndex = 0;
+          showResultModal();
+          return;
+        } else {}
+
         curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
         startPos.value = 1.0;
         endPos.value = 0.0;
       },
     );
+  }
+
+  showResultModal() {
+    showGeneralDialog(
+      context: scaffoldKey.currentContext!,
+      pageBuilder: (context, anim1, anim2) {
+        return Container();
+      },
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.4),
+      barrierLabel: '',
+      transitionBuilder: (context, anim1, anim2, child) {
+        return Transform.rotate(
+          angle: math.radians(anim1.value * 360),
+          child: Opacity(
+            opacity: anim1.value,
+            child: CompletedQuestionsModal(),
+          ),
+        );
+      },
+      transitionDuration: Duration(milliseconds: 300),
+    );
+  }
+
+  _showSnackMessage(String message) {
+    Get.showSnackbar(GetBar(
+      title: 'Mensagem:',
+      message: message,
+      duration: Duration(milliseconds: 1500),
+      snackPosition: SnackPosition.BOTTOM,
+    ));
   }
 }
