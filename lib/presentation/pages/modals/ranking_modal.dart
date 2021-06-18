@@ -7,54 +7,75 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RankingModal extends GetView<HomePageController> {
-  final ranquingItems = ['Tel', 'John', 'Jorge', 'Liz', 'Ze'];
-
   Widget build(BuildContext context) {
     final title = Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Text(
-          'Ranking',
+          'TOP 5',
           style: TextStyle(
             color: Colors.black,
           ),
         ),
       ),
     );
-    final options = Flexible(
-      child: Center(
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: ranquingItems.length,
-          itemBuilder: (BuildContext context, int position) {
-            return InkWell(
-              child: Container(
-                child: Card(
-                  color: AppStyle.segundaryColor,
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  shape: StadiumBorder(side: BorderSide(color: AppStyle.segundaryColor, width: 2.0)),
-                  elevation: 5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Text(
-                          ranquingItems[position],
-                          style: TextStyle(color: AppStyle.primaryColor),
-                        ),
-                      ),
-                    ],
+    final ranking = Obx(
+      () => ListView.builder(
+        shrinkWrap: true,
+        itemCount: controller.ranking.value!.length,
+        itemBuilder: (BuildContext context, int position) {
+          return Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: AppStyle.segundaryColor,
+                  child: Center(
+                    child: Text(
+                      '${position + 1}º',
+                      style: TextStyle(color: AppStyle.primaryColor, fontSize: 13),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+                Expanded(
+                  child: Container(
+                    child: Card(
+                      color: AppStyle.segundaryColor,
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      shape: StadiumBorder(side: BorderSide(color: AppStyle.segundaryColor, width: 2.0)),
+                      elevation: 5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            child: Text(
+                              controller.ranking.value![position].name,
+                              style: TextStyle(color: AppStyle.primaryColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                CircleAvatar(
+                  backgroundColor: AppStyle.segundaryColor,
+                  child: Center(
+                    child: Text(
+                      '${controller.ranking.value![position].hit}%',
+                      style: TextStyle(color: AppStyle.primaryColor, fontSize: 13),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
     final button = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: 5.0),
       child: FloatingActionButton.extended(
         backgroundColor: AppStyle.segundaryColor,
         onPressed: () => controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget()),
@@ -79,8 +100,19 @@ class RankingModal extends GetView<HomePageController> {
         Spacing.extraSmall(),
         title,
         Spacing.extraSmall(),
-        options,
-        Spacing.extraSmall(),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: controller.ranking.value!.isEmpty
+                ? Center(
+                    child: Text(
+                      'Sem registros!',
+                      style: TextStyle(color: AppStyle.segundaryColor),
+                    ),
+                  )
+                : ranking,
+          ),
+        ),
         button,
       ],
     );

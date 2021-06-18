@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:automakers_quiz/core/domain/models/question_model.dart';
+import 'package:automakers_quiz/core/domain/models/ranking_model.dart';
 import 'package:automakers_quiz/infrastructure/repositories/data_service.dart';
+import 'package:automakers_quiz/infrastructure/repositories/database.dart';
 import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
 import 'package:automakers_quiz/presentation/pages/modals/ranking_modal.dart';
 import 'package:vector_math/vector_math.dart' as math;
@@ -27,33 +29,10 @@ class HomePageController extends GetxController {
   final questions = Rx(<Question>[]);
   final currentQuestion = Rxn<Question>();
   int _currentQuestionIndex = 0;
-  final questionsTest = Rx(<Question>[
-    Question.fromJson({
-      "brand": "BMW",
-      "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
-      "correct": "alemanha"
-    }),
-    Question.fromJson({
-      "brand": "Toyota",
-      "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
-      "correct": "japao"
-    }),
-    Question.fromJson({
-      "brand": "Mini  Cooper",
-      "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
-      "correct": "inglaterra"
-    }),
-    Question.fromJson({
-      "brand": "General  Motors",
-      "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
-      "correct": "usa"
-    }),
-    Question.fromJson({
-      "brand": "Rolls Royce",
-      "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
-      "correct": "inglaterra"
-    }),
-  ]);
+  int hits = 0;
+
+  //ranking
+  final ranking = Rxn<List<Ranking>>();
 
   @override
   void onInit() {
@@ -73,10 +52,29 @@ class HomePageController extends GetxController {
     currentQuestion.value = questions.value[_currentQuestionIndex];
   }
 
+  Future<void> addRanking() async {
+    final hitsPercent = (hits * 100) / questions.value.length;
+
+    if (hitsPercent > 0) {
+      final ranking = Ranking(hit: hitsPercent.toInt(), name: nickName.text);
+      await DBProvider.db.newRanking(ranking);
+    }
+    DBProvider.db.getTopFiveRankings().then((ranking) => this.ranking.value = ranking);
+    hits = 0;
+  }
+
   void changeQuestionWithSlidAnimation() {
     curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
     startPos.value = 0.0;
     endPos.value = 1.0;
+
+    if (selectedIndex.value != -1) {
+      final answer = currentQuestion.value!.options[selectedIndex.value];
+      final correct = currentQuestion.value!.correct;
+      if (answer.toLowerCase() == correct.toLowerCase()) {
+        hits++;
+      }
+    }
 
     Future.delayed(
       Duration(milliseconds: 1000),
@@ -89,7 +87,8 @@ class HomePageController extends GetxController {
           currentQuestion.value!.options.shuffle();
         } else if (_currentQuestionIndex == (questions.value.length - 1)) {
           _currentQuestionIndex = 0;
-          _showResultModal();
+          addRanking();
+          // _showResultModal();
           changeChildOfSlidWidgetSlidAnimation(RankingModal());
         }
 
