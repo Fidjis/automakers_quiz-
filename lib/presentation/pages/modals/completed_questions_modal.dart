@@ -100,6 +100,7 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
                   onPressed: () {
                     controller.resetQuestions();
                     controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
+                    controller.startTimer();
                     Navigator.pop(context);
                   },
                   mini: true,

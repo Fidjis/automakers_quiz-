@@ -1,5 +1,5 @@
 import 'package:automakers_quiz/presentation/pages/home_page/home_page_controller.dart';
-import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_quetions_widget.dart';
+import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
 import 'package:automakers_quiz/presentation/util/app_style.dart';
 import 'package:automakers_quiz/presentation/widgets/spacing.dart';
 import 'package:automakers_quiz/presentation/widgets/star_icon_widget.dart';
@@ -78,7 +78,11 @@ class RankingModal extends GetView<HomePageController> {
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: FloatingActionButton.extended(
         backgroundColor: AppStyle.segundaryColor,
-        onPressed: () => controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget()),
+        onPressed: () {
+          controller.nickName.text = '';
+          controller.changeChildOfSlidWidgetSlidAnimation(UserNameWidget());
+          Navigator.pop(context);
+        },
         label: Icon(
           Icons.play_arrow,
           color: AppStyle.primaryColor,

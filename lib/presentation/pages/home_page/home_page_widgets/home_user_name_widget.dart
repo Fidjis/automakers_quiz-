@@ -41,7 +41,10 @@ class UserNameWidget extends GetView<HomePageController> {
       child: FloatingActionButton.extended(
         backgroundColor: AppStyle.segundaryColor,
         onPressed: () {
-          if (formKey.currentState!.validate()) controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
+          if (formKey.currentState!.validate()) {
+            controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
+            controller.startTimer();
+          }
         },
         label: Icon(
           Icons.play_arrow,

@@ -1,6 +1,8 @@
 import 'package:automakers_quiz/presentation/util/app_style.dart';
 import 'package:flutter/material.dart';
 
+import 'home_timer_widget.dart';
+
 class HomeBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,10 +22,7 @@ class HomeBottomBar extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[],
-      ),
+      child: TimerWidget(),
     );
   }
 }

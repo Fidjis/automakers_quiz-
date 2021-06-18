@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:automakers_quiz/core/domain/models/question_model.dart';
@@ -28,11 +29,16 @@ class HomePageController extends GetxController {
   final selectedIndex = Rx(-1);
   final questions = Rx(<Question>[]);
   final currentQuestion = Rxn<Question>();
-  int _currentQuestionIndex = 0;
+  final currentQuestionIndex = Rx(0);
   int hits = 0;
 
   //ranking
   final ranking = Rxn<List<Ranking>>();
+
+  //timerWidget
+  late Timer _timer;
+  final timerStart = Rx(10);
+  final timerProgress = Rx(1.0);
 
   @override
   void onInit() {
@@ -43,13 +49,34 @@ class HomePageController extends GetxController {
 
   @override
   void onClose() {
+    _timer.cancel();
     super.onClose();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      if (timerStart.value == 0) {
+        _timer.cancel();
+        timerStart.value = 10;
+        timerProgress.value = 1;
+        changeQuestionWithSlidAnimation();
+      } else {
+        timerProgress.value -= 0.1;
+        timerStart.value--;
+      }
+    });
+  }
+
+  void resetTimer() {
+    _timer.cancel();
+    timerStart.value = 10;
+    timerProgress.value = 1.0;
   }
 
   void resetQuestions() {
     questions.value.shuffle();
-    _currentQuestionIndex = 0;
-    currentQuestion.value = questions.value[_currentQuestionIndex];
+    currentQuestionIndex.value = 0;
+    currentQuestion.value = questions.value[currentQuestionIndex.value];
   }
 
   Future<void> addRanking() async {
@@ -67,6 +94,7 @@ class HomePageController extends GetxController {
     curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
     startPos.value = 0.0;
     endPos.value = 1.0;
+    resetTimer();
 
     if (selectedIndex.value != -1) {
       final answer = currentQuestion.value!.options[selectedIndex.value];
@@ -81,14 +109,16 @@ class HomePageController extends GetxController {
       () {
         //change next question
         selectedIndex.value = -1;
-        if (_currentQuestionIndex < (questions.value.length - 1)) {
-          _currentQuestionIndex++;
-          currentQuestion.value = questions.value[_currentQuestionIndex];
+        if (currentQuestionIndex < (questions.value.length - 1)) {
+          currentQuestionIndex.value++;
+          currentQuestion.value = questions.value[currentQuestionIndex.value];
           currentQuestion.value!.options.shuffle();
-        } else if (_currentQuestionIndex == (questions.value.length - 1)) {
-          _currentQuestionIndex = 0;
+          startTimer();
+        } else if (currentQuestionIndex == (questions.value.length - 1)) {
+          currentQuestionIndex.value = 0;
+          resetTimer();
           addRanking();
-          // _showResultModal();
+          _showResultModal();
           changeChildOfSlidWidgetSlidAnimation(RankingModal());
         }
 
@@ -138,7 +168,6 @@ class HomePageController extends GetxController {
     Future.delayed(
       Duration(milliseconds: 1000),
       () {
-        //change next question
         childOfSlidWidget.value = newChild;
 
         curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
@@ -155,7 +184,7 @@ class HomePageController extends GetxController {
           final List<dynamic> json = jsonDecode(Utf8Decoder().convert(result.bodyBytes));
           questions.value = json.map((element) => Question.fromJson(element)).toList();
           questions.value.shuffle();
-          currentQuestion.value = questions.value[_currentQuestionIndex];
+          currentQuestion.value = questions.value[currentQuestionIndex.value];
         } catch (e) {
           _showSnackMessage('Erro ao obter as questões!');
         }
