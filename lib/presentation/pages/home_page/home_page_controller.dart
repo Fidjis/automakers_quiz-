@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
+  late double hitsPercent;
   //Menu
   final isPlayOptionSelected = Rx(false);
   final isPlaying = Rx(false);
@@ -84,7 +85,7 @@ class HomePageController extends GetxController {
   }
 
   Future<void> addRanking() async {
-    final hitsPercent = (hits * 100) / questions.value.length;
+    hitsPercent = (hits * 100) / questions.value.length;
 
     if (hitsPercent > 0) {
       final ranking = Ranking(hit: hitsPercent.toInt(), name: nickName.text);

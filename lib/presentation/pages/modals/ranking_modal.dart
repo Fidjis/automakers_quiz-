@@ -106,16 +106,18 @@ class RankingModal extends GetView<HomePageController> {
         title,
         Spacing.extraSmall(),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: controller.ranking.value == null
-                ? Center(
-                    child: Text(
-                      'Sem registros!',
-                      style: TextStyle(color: AppStyle.segundaryColor),
-                    ),
-                  )
-                : ranking,
+          child: Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: controller.ranking.value == null
+                  ? Center(
+                      child: Text(
+                        'Sem registros!',
+                        style: TextStyle(color: AppStyle.segundaryColor),
+                      ),
+                    )
+                  : ranking,
+            ),
           ),
         ),
         button,
