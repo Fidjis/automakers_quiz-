@@ -1,5 +1,8 @@
 import 'package:automakers_quiz/presentation/pages/home_page/home_page_controller.dart';
+import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_quetions_widget.dart';
+import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
 import 'package:automakers_quiz/presentation/util/app_style.dart';
+import 'package:automakers_quiz/presentation/widgets/spacing.dart';
 import 'package:automakers_quiz/presentation/widgets/star_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +21,9 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
   }
 
   dialogContent(BuildContext context) {
-    return SingleChildScrollView(
+    return SizedBox(
+      height: 300,
+      width: 300,
       child: Stack(
         children: <Widget>[
           Container(
@@ -47,19 +52,19 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
                 Text(
                   "Parabéns!",
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize: 22.0,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 16.0),
+                Spacing.normal(),
                 Text(
-                  "Voce conseguiu completar todas as questões!",
+                  "Você conseguiu completar todas as questões!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 15.0,
                   ),
                 ),
-                SizedBox(height: 24.0)
+                Spacing.normal(),
               ],
             ),
           ),
@@ -92,18 +97,26 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
               children: [
                 FloatingActionButton(
                   backgroundColor: AppStyle.primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                    controller.resetQuestions();
+                    controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
+                  },
                   mini: true,
                   child: Icon(Icons.refresh),
                 ),
                 FloatingActionButton.extended(
                   backgroundColor: AppStyle.primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                    controller.nickName.text = '';
+                    controller.changeChildOfSlidWidgetSlidAnimation(UserNameWidget());
+                  },
                   label: Text('Novo Jogo'),
                 ),
                 FloatingActionButton(
                   backgroundColor: AppStyle.primaryColor,
-                  onPressed: () {},
+                  onPressed: () => Navigator.pop(context),
                   mini: true,
                   child: Icon(Icons.close),
                 ),

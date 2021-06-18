@@ -1,5 +1,4 @@
 import 'package:automakers_quiz/presentation/widgets/app_bar/my_app_bar.dart';
-import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_quetions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,8 +19,10 @@ class HomePage extends GetView<HomePageController> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 80.0),
-                child: SlideInOutWidget(
-                  child: QuestionsWidget(),
+                child: Obx(
+                  () => SlideInOutWidget(
+                    child: controller.childOfSlidWidget.value,
+                  ),
                 ),
               ),
             )

@@ -5,7 +5,7 @@ class AppTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: double.infinity,
       height: 100.0,
       child: Stack(
         alignment: Alignment.center,

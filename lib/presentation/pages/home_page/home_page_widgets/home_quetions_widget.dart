@@ -84,7 +84,7 @@ class QuestionsWidget extends GetView<HomePageController> {
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: FloatingActionButton.extended(
         backgroundColor: AppStyle.segundaryColor,
-        onPressed: () => controller.changeContendChildWithSlidAnimation(),
+        onPressed: () => controller.changeQuestionWithSlidAnimation(),
         label: Icon(
           Icons.play_arrow,
           color: AppStyle.primaryColor,

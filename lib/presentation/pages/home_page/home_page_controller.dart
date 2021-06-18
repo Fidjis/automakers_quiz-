@@ -1,17 +1,25 @@
 import 'package:automakers_quiz/core/domain/models/question_model.dart';
+import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
+import 'package:automakers_quiz/presentation/pages/modals/ranking_modal.dart';
 import 'package:vector_math/vector_math.dart' as math;
 import 'package:automakers_quiz/presentation/pages/modals/completed_questions_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'home_page_widgets/home_quetions_widget.dart';
+
 class HomePageController extends GetxController {
   //home
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  //UserNameWidget
+  final nickName = TextEditingController();
 
   //SlidInOutWidget
   final startPos = Rx<double>(-1.0);
   final endPos = Rx<double>(0.0);
   final curve = Rx<Curve>(Curves.elasticOut);
+  final childOfSlidWidget = Rx<Widget>(QuestionsWidget());
 
   //QuestionsWidget
   final selectedIndex = Rx(-1);
@@ -51,6 +59,7 @@ class HomePageController extends GetxController {
     super.onInit();
     questions.value.shuffle();
     currentQuestion.value = questions.value[_currentQuestionIndex];
+    childOfSlidWidget.value = UserNameWidget();
   }
 
   @override
@@ -58,7 +67,13 @@ class HomePageController extends GetxController {
     super.onClose();
   }
 
-  void changeContendChildWithSlidAnimation() {
+  void resetQuestions() {
+    questions.value.shuffle();
+    _currentQuestionIndex = 0;
+    currentQuestion.value = questions.value[_currentQuestionIndex];
+  }
+
+  void changeQuestionWithSlidAnimation() {
     curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
 
     startPos.value = 0.0;
@@ -74,11 +89,11 @@ class HomePageController extends GetxController {
           currentQuestion.value = questions.value[_currentQuestionIndex];
           currentQuestion.value!.options.shuffle();
         } else if (_currentQuestionIndex == (questions.value.length - 1)) {
-          // _showSnackMessage('Fim das questões!');
           _currentQuestionIndex = 0;
-          showResultModal();
+          _showResultModal();
+          changeChildOfSlidWidgetSlidAnimation(RankingModal());
           return;
-        } else {}
+        }
 
         curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
         startPos.value = 1.0;
@@ -87,7 +102,7 @@ class HomePageController extends GetxController {
     );
   }
 
-  showResultModal() {
+  _showResultModal() {
     showGeneralDialog(
       context: scaffoldKey.currentContext!,
       pageBuilder: (context, anim1, anim2) {
@@ -116,5 +131,24 @@ class HomePageController extends GetxController {
       duration: Duration(milliseconds: 1500),
       snackPosition: SnackPosition.BOTTOM,
     ));
+  }
+
+  changeChildOfSlidWidgetSlidAnimation(Widget newChild) {
+    curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
+
+    startPos.value = 0.0;
+    endPos.value = 1.0;
+
+    Future.delayed(
+      Duration(milliseconds: 1000),
+      () {
+        //change next question
+        childOfSlidWidget.value = newChild;
+
+        curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
+        startPos.value = 1.0;
+        endPos.value = 0.0;
+      },
+    );
   }
 }
