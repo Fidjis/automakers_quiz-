@@ -1,12 +1,13 @@
+import 'dart:convert';
+
 import 'package:automakers_quiz/core/domain/models/question_model.dart';
+import 'package:automakers_quiz/infrastructure/repositories/data_service.dart';
 import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
 import 'package:automakers_quiz/presentation/pages/modals/ranking_modal.dart';
 import 'package:vector_math/vector_math.dart' as math;
 import 'package:automakers_quiz/presentation/pages/modals/completed_questions_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'home_page_widgets/home_quetions_widget.dart';
 
 class HomePageController extends GetxController {
   //home
@@ -23,10 +24,10 @@ class HomePageController extends GetxController {
 
   //QuestionsWidget
   final selectedIndex = Rx(-1);
-  // final question = Rx(<Question>[]);
+  final questions = Rx(<Question>[]);
   final currentQuestion = Rxn<Question>();
   int _currentQuestionIndex = 0;
-  final questions = Rx(<Question>[
+  final questionsTest = Rx(<Question>[
     Question.fromJson({
       "brand": "BMW",
       "options": ["Inglaterra", "USA", "Alemanha", "JapÃ£o"],
@@ -57,9 +58,8 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    questions.value.shuffle();
-    currentQuestion.value = questions.value[_currentQuestionIndex];
     childOfSlidWidget.value = UserNameWidget();
+    getQuestions();
   }
 
   @override
@@ -75,7 +75,6 @@ class HomePageController extends GetxController {
 
   void changeQuestionWithSlidAnimation() {
     curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
-
     startPos.value = 0.0;
     endPos.value = 1.0;
 
@@ -127,14 +126,13 @@ class HomePageController extends GetxController {
     Get.showSnackbar(GetBar(
       title: 'Mensagem:',
       message: message,
-      duration: Duration(milliseconds: 1500),
+      duration: Duration(milliseconds: 3000),
       snackPosition: SnackPosition.BOTTOM,
     ));
   }
 
   changeChildOfSlidWidgetSlidAnimation(Widget newChild) {
     curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
-
     startPos.value = 0.0;
     endPos.value = 1.0;
 
@@ -149,5 +147,22 @@ class HomePageController extends GetxController {
         endPos.value = 0.0;
       },
     );
+  }
+
+  void getQuestions() {
+    DataServices.makeGetRequest(url: DataServices.end_point_auto_quiz_v1).then((result) {
+      if (result.statusCode == 200) {
+        try {
+          final List<dynamic> json = jsonDecode(Utf8Decoder().convert(result.bodyBytes));
+          questions.value = json.map((element) => Question.fromJson(element)).toList();
+          questions.value.shuffle();
+          currentQuestion.value = questions.value[_currentQuestionIndex];
+        } catch (e) {
+          _showSnackMessage('Erro ao obter as questões!');
+        }
+      } else {
+        _showSnackMessage('Erro ao obter as questões!');
+      }
+    });
   }
 }
