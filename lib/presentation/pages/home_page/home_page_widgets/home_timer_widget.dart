@@ -10,7 +10,8 @@ class TimerWidget extends GetView<HomePageController> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Obx(
           () => Text(
-            '${controller.currentQuestionIndex.value + 1}°',
+            ' Quest:  \n${controller.currentQuestionIndex.value + 1}° ',
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
             ),
@@ -23,7 +24,8 @@ class TimerWidget extends GetView<HomePageController> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Obx(
           () => Text(
-            '${controller.questions.value.length}',
+            'Quests:\n${controller.questions.value.length}',
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
             ),
