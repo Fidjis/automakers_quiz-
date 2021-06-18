@@ -98,9 +98,9 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
                 FloatingActionButton(
                   backgroundColor: AppStyle.primaryColor,
                   onPressed: () {
-                    Navigator.pop(context);
                     controller.resetQuestions();
                     controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
+                    Navigator.pop(context);
                   },
                   mini: true,
                   child: Icon(Icons.refresh),
@@ -108,9 +108,9 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
                 FloatingActionButton.extended(
                   backgroundColor: AppStyle.primaryColor,
                   onPressed: () {
-                    Navigator.pop(context);
                     controller.nickName.text = '';
                     controller.changeChildOfSlidWidgetSlidAnimation(UserNameWidget());
+                    Navigator.pop(context);
                   },
                   label: Text('Novo Jogo'),
                 ),

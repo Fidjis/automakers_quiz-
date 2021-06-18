@@ -19,7 +19,7 @@ class HomePageController extends GetxController {
   final startPos = Rx<double>(-1.0);
   final endPos = Rx<double>(0.0);
   final curve = Rx<Curve>(Curves.elasticOut);
-  final childOfSlidWidget = Rx<Widget>(QuestionsWidget());
+  final childOfSlidWidget = Rxn<Widget>();
 
   //QuestionsWidget
   final selectedIndex = Rx(-1);
@@ -92,7 +92,6 @@ class HomePageController extends GetxController {
           _currentQuestionIndex = 0;
           _showResultModal();
           changeChildOfSlidWidgetSlidAnimation(RankingModal());
-          return;
         }
 
         curve.value = curve.value == Curves.elasticOut ? Curves.elasticIn : Curves.elasticOut;
