@@ -15,7 +15,7 @@ class UserNameWidget extends GetView<HomePageController> {
       'Insira seu nome de usuario:',
       style: TextStyle(
         color: AppStyle.segundaryColor,
-        fontSize: 22,
+        fontSize: 18,
       ),
     );
     final nickNameInput = Card(
@@ -44,6 +44,7 @@ class UserNameWidget extends GetView<HomePageController> {
           if (formKey.currentState!.validate()) {
             controller.changeChildOfSlidWidgetSlidAnimation(QuestionsWidget());
             controller.startTimer();
+            controller.isPlaying.value = true;
           }
         },
         label: Icon(

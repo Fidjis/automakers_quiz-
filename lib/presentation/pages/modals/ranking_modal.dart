@@ -80,8 +80,8 @@ class RankingModal extends GetView<HomePageController> {
         backgroundColor: AppStyle.segundaryColor,
         onPressed: () {
           controller.nickName.text = '';
+          controller.isPlayOptionSelected.value = true;
           controller.changeChildOfSlidWidgetSlidAnimation(UserNameWidget());
-          Navigator.pop(context);
         },
         label: Icon(
           Icons.play_arrow,
@@ -89,25 +89,26 @@ class RankingModal extends GetView<HomePageController> {
         ),
       ),
     );
+    final stars = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        StarIcon(),
+        StarIcon(),
+        StarIcon(),
+      ],
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Spacing.extraSmall(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StarIcon(),
-            StarIcon(),
-            StarIcon(),
-          ],
-        ),
+        stars,
         Spacing.extraSmall(),
         title,
         Spacing.extraSmall(),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: controller.ranking.value!.isEmpty
+            child: controller.ranking.value == null
                 ? Center(
                     child: Text(
                       'Sem registros!',

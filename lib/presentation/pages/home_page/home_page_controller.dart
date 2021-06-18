@@ -5,7 +5,6 @@ import 'package:automakers_quiz/core/domain/models/question_model.dart';
 import 'package:automakers_quiz/core/domain/models/ranking_model.dart';
 import 'package:automakers_quiz/infrastructure/repositories/data_service.dart';
 import 'package:automakers_quiz/infrastructure/repositories/database.dart';
-import 'package:automakers_quiz/presentation/pages/home_page/home_page_widgets/home_user_name_widget.dart';
 import 'package:automakers_quiz/presentation/pages/modals/ranking_modal.dart';
 import 'package:vector_math/vector_math.dart' as math;
 import 'package:automakers_quiz/presentation/pages/modals/completed_questions_modal.dart';
@@ -13,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
+  //Menu
+  final isPlayOptionSelected = Rx(false);
+  final isPlaying = Rx(false);
+
   //home
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -43,7 +46,8 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    childOfSlidWidget.value = UserNameWidget();
+    DBProvider.db.getTopFiveRankings().then((ranking) => this.ranking.value = ranking);
+    childOfSlidWidget.value = RankingModal();
     getQuestions();
   }
 
@@ -119,6 +123,8 @@ class HomePageController extends GetxController {
           resetTimer();
           addRanking();
           _showResultModal();
+          isPlaying.value = false;
+          isPlayOptionSelected.value = false;
           changeChildOfSlidWidgetSlidAnimation(RankingModal());
         }
 
