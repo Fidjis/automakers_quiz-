@@ -13,9 +13,7 @@ class RankingModal extends GetView<HomePageController> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Text(
           'TOP 5',
-          style: TextStyle(
-            color: Colors.black,
-          ),
+          style: TextStyle(color: AppStyle.primaryColor),
         ),
       ),
     );
@@ -92,9 +90,9 @@ class RankingModal extends GetView<HomePageController> {
     final stars = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        StarIcon(),
-        StarIcon(),
-        StarIcon(),
+        StarIcon.white(),
+        StarIcon.white(),
+        StarIcon.white(),
       ],
     );
     return Column(
@@ -109,7 +107,7 @@ class RankingModal extends GetView<HomePageController> {
           child: Obx(
             () => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: controller.ranking.value == null
+              child: controller.ranking.value == null || controller.ranking.value!.isEmpty
                   ? Center(
                       child: Text(
                         'Sem registros!',

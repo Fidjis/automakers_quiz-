@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fidjis.automakers_quiz">
    <application
-        android:label="automakers_quiz"
+        android:label="Automakers Quiz"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

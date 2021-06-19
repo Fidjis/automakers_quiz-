@@ -15,7 +15,7 @@ class SlideInOutWidget extends GetView<HomePageController> {
         tween: Tween<Offset>(begin: Offset(controller.startPos.value, 0), end: Offset(controller.endPos.value, 0)),
         duration: Duration(seconds: 1),
         curve: controller.curve.value,
-        builder: (context, offset, child) {
+        builder: (context, offset, _) {
           return FractionalTranslation(
             translation: offset as Offset,
             child: Center(

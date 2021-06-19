@@ -95,7 +95,7 @@ class QuestionsWidget extends GetView<HomePageController> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Spacing.extraSmall(),
-        StarIcon(),
+        StarIcon.white(),
         Spacing.extraSmall(),
         question,
         Spacing.extraSmall(),

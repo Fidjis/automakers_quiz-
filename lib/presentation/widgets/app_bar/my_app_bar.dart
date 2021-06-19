@@ -33,18 +33,19 @@ class MyAppBar extends StatelessWidget {
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(1.0), color: Colors.white),
                 child: Row(
                   children: [
-                    StarIcon(),
+                    StarIcon.primaryColor(),
                     Expanded(
                       child: Container(
                         alignment: Alignment.center,
                         child: Text(
                           "“Prove o que você sabe”",
+                          style: TextStyle(color: AppStyle.primaryColor),
                           textScaleFactor: 0.9,
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    StarIcon(),
+                    StarIcon.primaryColor(),
                   ],
                 ),
               ),

@@ -108,35 +108,35 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          StarIcon(),
-          StarIcon(),
-          StarIcon(),
-          StarIcon(),
-          StarIcon(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
         ],
       );
     } else if (percent >= 70) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          StarIcon(),
-          StarIcon(),
-          StarIcon(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
         ],
       );
     } else if (percent >= 40) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          StarIcon(),
-          StarIcon(),
+          StarIcon.primaryColor(),
+          StarIcon.primaryColor(),
         ],
       );
     } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          StarIcon(),
+          StarIcon.primaryColor(),
         ],
       );
     }
@@ -164,7 +164,7 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
         Text(
           title,
           style: TextStyle(
-            fontSize: 22.0,
+            fontSize: 18.0,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -173,10 +173,9 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
           message,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 12.0,
           ),
         ),
-        Spacing.normal(),
       ],
     );
   }
