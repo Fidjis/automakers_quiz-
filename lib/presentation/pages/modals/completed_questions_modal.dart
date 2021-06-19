@@ -59,6 +59,7 @@ class CompletedQuestionsModal extends GetView<HomePageController> {
           Positioned(
             left: Consts.padding,
             right: Consts.padding,
+            top: Consts.padding,
             child: _buildStars(percent: controller.hitsPercent.toInt()),
           ),
           Positioned(

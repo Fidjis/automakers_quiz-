@@ -20,7 +20,14 @@ class SlideInOutWidget extends GetView<HomePageController> {
             translation: offset as Offset,
             child: Center(
               child: Container(
-                child: child,
+                child: Card(
+                  elevation: 5,
+                  color: AppStyle.terciaryColor,
+                  child: child,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
                 height: 350.0,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
@@ -39,8 +46,6 @@ class SlideInOutWidget extends GetView<HomePageController> {
             ),
           );
         },
-        child: child,
-        onEnd: () {},
       ),
     );
   }
