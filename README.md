@@ -3,7 +3,7 @@
 
 
 - Flutter project.
-- Clean Archteture
+- Clean Architecture
 - GetX
 - Sqflite
 - Api
